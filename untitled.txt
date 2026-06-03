@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untukmu ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ff8fa3;
+            --soft-pink: #ffc2d1;
+            --bg-color: #fff0f3;
+            --text-color: #590d22;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Elemen Hati Melayang di Background (Static Decor) */
+        .bg-heart {
+            position: fixed;
+            color: rgba(255, 143, 163, 0.2);
+            animation: floatUp 15s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        h1 {
+            font-family: 'Indie Flower', cursive;
+            font-size: 3.5rem;
+            color: #c9184a;
+            text-shadow: 2px 2px 0px var(--white);
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #800f2f;
+            margin-top: 0.5rem;
+        }
+
+        /* Container Surat */
+        .letters-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding-bottom: 150px; /* Space for scroll */
+        }
+
+        /* Desain Amplop/Surat */
+        .letter-card {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(255, 143, 163, 0.3);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 2px solid var(--soft-pink);
+            position: relative;
+        }
+
+        .letter-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Bagian Cover Amplop */
+        .letter-header {
+            background: linear-gradient(135deg, var(--primary-pink), #ff758f);
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .letter-header span {
+            z-index: 2;
+        }
+
+        .seal {
+            width: 40px;
+            height: 40px;
+            background: #a4133c;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.5s ease;
+        }
+
+        .letter-card.open .seal {
+            transform: rotate(360deg) scale(0);
+            opacity: 0;
+        }
+
+        /* Isi Surat */
+        .letter-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.8s ease-out, padding 0.8s ease;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffc2d1' fill-opacity='0.2' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .letter-card.open .letter-content {
+            max-height: 1000px;
+            padding: 30px;
+            line-height: 1.8;
+            font-size: 1rem;
+            color: #4a0404;
+        }
+
+        /* Efek Partikel Hati Kecil saat Buka Surat */
+        .mini-heart {
+            position: absolute;
+            color: var(--primary-pink);
+            font-size: 1.5rem;
+            animation: pop 0.8s ease-out forwards;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        @keyframes pop {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        /* Prompt untuk Scroll */
+        .scroll-prompt {
+            text-align: center;
+            padding: 40px;
+            opacity: 0.7;
+            animation: bounce 2s infinite;
+            transition: opacity 0.5s;
+        }
+
+        .scroll-prompt.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .scroll-prompt p {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.5rem;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        /* Bagian Akhir Pertanyaan - MODIFIED: Hidden by default */
+        .proposal-section {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #fff0f3 0%, #ffccd5 100%);
+            position: relative;
+            padding: 20px;
+            text-align: center;
+            overflow: hidden;
+            
+            /* State Tersembunyi */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(50px);
+            transition: opacity 1s ease, visibility 1s ease, transform 1s ease;
+        }
+
+        /* State Terlihat */
+        .proposal-section.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .proposal-text {
+            font-family: 'Indie Flower', cursive;
+            font-size: 4rem;
+            color: #d90429;
+            position: relative;
+            z-index: 2;
+            text-shadow: 3px 3px 0px white;
+            line-height: 1.2;
+            transition: transform 0.3s;
+        }
+        
+        .proposal-text:hover {
+            transform: scale(1.1);
+        }
+
+        /* Hati yang muncul saat scroll di section bawah */
+        .scroll-heart {
+            position: fixed;
+            bottom: -50px;
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 100;
+            animation: floatUpScroll 3s linear forwards;
+        }
+
+        @keyframes floatUpScroll {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Responsiveness */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .proposal-text { font-size: 2.5rem; }
+            .letter-header { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Cerita Kita ❤️</h1>
+        <p class="subtitle">Baca semua surat dulu ya...</p>
+    </header>
+
+    <!-- Elemen background hati -->
+    <div id="bg-container"></div>
+
+    <main class="letters-container">
+
+        <!-- Surat Pertama -->
+        <article class="letter-card" onclick="toggleLetter(this)">
+            <div class="letter-header">
+                <span>Surat Pertama: Awal Bertemu</span>
+                <div class="seal">💕</div>
+            </div>
+            <div class="letter-content">
+                <p>04 Desember kita kenal tanggal itu dan dari awal berniat untuk temenan dan chatan pun sangat aneh "haaii pewaris uzumaki" terus kamu menjawab "haihai uchia kw" AHAHAHAHHA lucu sih kenalan seperti itu tapi dari kenalan kayak gitu ternyata masih awet ya kita. dua hari setelah itu tanggal 06 Desember kita main bareng untuk pertama kalinya di roblox yah mount aneh sih tapi gak apa dan ada sedikit drama lag di aku terus lanjut main twenty one dan yah aku kalah, masih di tanggal yang sama 06 Desember kamu mengajak mutualan sosmed lain dan minta follow tiktok dan aku minta mutualan di ig WLELELELE, kamu kasih ige mu yang aktif lagi berarti fix ini mah ya.</p>
+            </div>
+        </article>
+
+        <!-- Surat Kedua -->
+        <article class="letter-card" onclick="toggleLetter(this)">
+            <div class="letter-header">
+                <span>Surat Kedua: Momen Spesial</span>
+                <div class="seal">💌</div>
+            </div>
+            <div class="letter-content">
+                <p>tanggal 01 Januari kamu ucapin ulang tahun mama aku dan kamu orang pertama yang capin itu jadi aku suka banget sama sifat kamu disini terus tanggal 2 Januari kita main mc ini sedikit beda karna kita akhirnya mengbrol secara langsung yah awalnya malu banget tapi lama kelamaan jadi gak dan nyaman, hmhm terus tanggal 03 Maret aku lakuin kesalahan dimana aku cuek in kamu dan buat kamu sedih dan nangis mana besoknya tanggal 04 lagi kan ya jadi yah itudeh aku harap kamu bisa maafkan aku DAN ITU UNTUK PERTAMA KALINYA AKU KETIK PANJANG KE SESEORANG, jadi situ aku mulai sayang sama kamu yyaiyai</p>
+            </div>
+        </article>
+
+        <!-- Surat Ketiga -->
+        <article class="letter-card" onclick="toggleLetter(this)">
+            <div class="letter-header">
+                <span>Surat Ketiga: Perasaan Bertambah</span>
+                <div class="seal">💖</div>
+            </div>
+            <div class="letter-content">
+                <p>setelah semua itu aku rasa kita semakin banyak chatan dan makin banyak sampe pindah ke line juga makin banyak dan tanggal 20 Mei tanggal lahir aku kamu bener bener ucapin aku tepat jam 12 malam AHAHHAHAHA SUKA BANGET SUMPAHH, terus aku juga makin sayang dan sayang aku terus bertambah setiap saat sama kamu dan itu beneran terus 4 hari setelahnya tanggal 24 Mei kamu mau hubungan kita yang lebih.</p>
+            </div>
+        </article>
+
+        <div class="scroll-prompt" id="scrollPrompt">
+            <p>↓ Buka surat sampai habis ya ↓</p>
+        </div>
+
+    </main>
+
+    <!-- Bagian Pertanyaan (Awalnya Tersembunyi) -->
+    <section class="proposal-section" id="proposalSection">
+        <div class="proposal-text">
+            Wanna be my girlfriend?
+        </div>
+    </section>
+
+    <script>
+        // Variabel pelacak status pembacaan
+        let readCount = 0;
+        const totalLetters = 3;
+
+        // 1. Fungsi untuk membaca surat
+        function toggleLetter(card) {
+            const isOpen = card.classList.contains('open');
+            
+            // Logika: Jika surat ini belum terbuka saat diklik, maka anggap user "membacanya"
+            if (!isOpen) {
+                // Cek apakah kartu ini sudah pernah dihitung sebelumnya (menggunakan data attribute)
+                if (!card.dataset.read) {
+                    readCount++;
+                    card.dataset.read = "true"; // Tandai bahwa kartu ini sudah dibaca
+                    createHeartExplosion(card); // Efek buka
+                    checkCompletion(); // Cek apakah semua sudah dibaca
+                }
+                card.classList.add('open');
+            } else {
+                card.classList.remove('open');
+            }
+        }
+
+        // 2. Cek apakah semua surat sudah dibaca
+        function checkCompletion() {
+            if (readCount === totalLetters) {
+                revealProposal();
+            }
+        }
+
+        // 3. Menampilkan pertanyaan (Unlock Content)
+        function revealProposal() {
+            // Sembunyikan prompt scroll
+            const prompt = document.getElementById('scrollPrompt');
+            if(prompt) prompt.classList.add('hidden');
+
+            // Tampilkan section proposal
+            const proposal = document.getElementById('proposalSection');
+            proposal.classList.add('visible');
+
+            // Scroll otomatis ke bawah agar user melihat kejutannya
+            setTimeout(() => {
+                proposal.scrollIntoView({ behavior: 'smooth' });
+                createFinalConfetti(); // Ledakan hati besar saat muncul
+            }, 600);
+        }
+
+        // Efek ledakan hati kecil saat membuka surat
+        function createHeartExplosion(element) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top;
+
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('mini-heart');
+                heart.innerText = ['❤️', '💕', '💗', '🥰', '😍'][Math.floor(Math.random() * 5)];
+                document.body.appendChild(heart);
+
+                heart.style.left = `${centerX}px`;
+                heart.style.top = `${centerY}px`;
+
+                const angle = Math.random() * Math.PI;
+                const velocity = 50 + Math.random() * 100;
+                const tx = Math.cos(angle) * velocity * (Math.random() > 0.5 ? 1 : -1);
+                const ty = Math.sin(angle) * velocity - 50;
+
+                heart.style.setProperty('--tx', `${tx}px`);
+                heart.style.setProperty('--ty', `${ty}px`);
+
+                setTimeout(() => heart.remove(), 800);
+            }
+        }
+
+        // Efek Confetti saat "Wanna be my girlfriend?" muncul
+        function createFinalConfetti() {
+            const proposalSection = document.getElementById('proposalSection');
+            const rect = proposalSection.getBoundingClientRect();
+            
+            // Buat banyak hati melayang naik dari bawah section ini
+            for(let i=0; i<30; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('mini-heart'); // Pakai style yang sama
+                    heart.innerText = ['💖', '💗', '🩷', '❤️', '🥰'][Math.floor(Math.random() * 5)];
+                    document.body.appendChild(heart);
+
+                    const randomX = rect.left + Math.random() * rect.width;
+                    heart.style.left = `${randomX}px`;
+                    heart.style.top = `${rect.bottom - 50}px`;
+
+                    const tx = (Math.random() - 0.5) * 100;
+                    const ty = -(Math.random() * 300 + 100); // Naik ke atas tinggi
+
+                    heart.style.setProperty('--tx', `${tx}px`);
+                    heart.style.setProperty('--ty', `${ty}px`);
+
+                    setTimeout(() => heart.remove(), 800);
+                }, i * 100);
+            }
+        }
+
+        // Efek Hati saat Scroll
+        let isScrolling = false;
+        window.addEventListener('scroll', () => {
+            if (!isScrolling) {
+                window.requestAnimationFrame(() => {
+                    createScrollHeart();
+                    isScrolling = false;
+                });
+                isScrolling = true;
+            }
+        });
+
+        function createScrollHeart() {
+            // Hanya munculkan hati scroll jika proposal section sudah terlihat
+            const proposal = document.getElementById('proposalSection');
+            const isVisible = proposal.classList.contains('visible');
+
+            if(isVisible && Math.random() > 0.85) {
+                const heart = document.createElement('div');
+                heart.classList.add('scroll-heart');
+                heart.innerHTML = ['💖', '💗', '🩷', '❤️'][Math.floor(Math.random() * 4)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                const size = Math.random() * 20 + 10;
+                heart.style.fontSize = size + 'px';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 3000);
+            }
+        }
+
+        // Generate background hati statis saat load
+        window.onload = () => {
+            const bgContainer = document.getElementById('bg-container');
+            for(let i=0; i<15; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('bg-heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                heart.style.animationDelay = (Math.random() * 5) + 's';
+                heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                bgContainer.appendChild(heart);
+            }
+        };
+    </script>
+</body>
+</html>
